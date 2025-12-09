@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="BookProcessor.UnitTests/BookProcessor.UnitTests.csproj" />
   <Project Path="BookProcessor/BookProcessor.csproj" />
   <Project Path="BookProcessorRunner/BookProcessorRunner.csproj" />
 </Solution>

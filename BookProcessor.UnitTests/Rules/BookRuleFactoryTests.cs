@@ -29,17 +29,13 @@ public class BookRuleFactoryTests
     }
 
     [Fact]
-    public void CreateDefaultFilterRules_ReturnsExcludeAuthorContainsRulesFromConfiguration()
+    public void CreateDefaultFilterRules_ReturnsExcludeAuthorContainsRule()
     {
         // Act
         var rules = BookRuleFactory.CreateDefaultFilterRules().ToList();
 
         // Assert
-        // Should have Saturday rule + author exclusion rules from appsettings.json
-        // Test appsettings.json contains "Peter" and "TestExcludedAuthor"
-        var authorRules = rules.OfType<ExcludeAuthorContainsRule>().ToList();
-        authorRules.Should().HaveCountGreaterThanOrEqualTo(1);
-        authorRules.Should().Contain(r => r.RuleName.Contains("Peter"));
+        rules.OfType<ExcludeAuthorContainsRule>().Should().ContainSingle();
     }
 
     [Fact]

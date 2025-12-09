@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="BookProcessor.UnitTests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.*" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.*" />
+    <PackageReference Include="NLog" Version="5.*" />
   </ItemGroup>
 
   <ItemGroup>

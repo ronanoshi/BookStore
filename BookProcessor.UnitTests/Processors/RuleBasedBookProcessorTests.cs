@@ -197,7 +197,7 @@ public class RuleBasedBookProcessorTests
         var filterRules = new List<IBookFilterRule>
         {
             new ExcludeSaturdayPublishedRule(),
-            new ExcludeAuthorContainsRule("Peter")
+            new ExcludeAuthorContainsRule(["Peter"])
         };
         var transformRules = new List<IBookTransformRule> { new RoundPriceUpRule() };
 

@@ -1,7 +1,6 @@
 using BookProcessor.Models;
 using FluentValidation.Results;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
+using NLog;
 
 namespace BookProcessor.Validation;
 
@@ -10,20 +9,13 @@ namespace BookProcessor.Validation;
 /// </summary>
 public class BookCollectionValidator
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     private readonly BookValidator _bookValidator;
-    private readonly ILogger<BookCollectionValidator> _logger;
 
     public BookCollectionValidator()
     {
         _bookValidator = new BookValidator();
-
-        var loggerFactory = LoggerFactory.Create(builder =>
-        {
-            builder.ClearProviders();
-            builder.SetMinimumLevel(LogLevel.Information);
-            builder.AddNLog();
-        });
-        _logger = loggerFactory.CreateLogger<BookCollectionValidator>();
     }
 
     /// <summary>
@@ -48,7 +40,7 @@ public class BookCollectionValidator
             // Check for duplicate ID first
             if (duplicateIds.Contains(book.Id))
             {
-                _logger.LogWarning(
+                Logger.Warn(
                     "Book skipped - Duplicate ID: Book with ID '{BookId}' (Title: '{Title}') has a duplicate ID in the file. All books with this ID will be excluded.",
                     book.Id, book.Title);
                 continue;
@@ -66,7 +58,7 @@ public class BookCollectionValidator
             validBooks.Add(book);
         }
 
-        _logger.LogInformation(
+        Logger.Info(
             "Validation complete: {ValidCount} valid books, {InvalidCount} books skipped",
             validBooks.Count, bookList.Count - validBooks.Count);
 
@@ -89,10 +81,10 @@ public class BookCollectionValidator
     /// <summary>
     /// Logs all validation errors for a book.
     /// </summary>
-    private void LogValidationErrors(Book book, ValidationResult validationResult)
+    private static void LogValidationErrors(Book book, ValidationResult validationResult)
     {
         var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
-        _logger.LogWarning(
+        Logger.Warn(
             "Book skipped - Validation failed: Book with ID '{BookId}' (Title: '{Title}') failed validation: {Errors}",
             book.Id ?? "(null)", book.Title ?? "(null)", errors);
     }

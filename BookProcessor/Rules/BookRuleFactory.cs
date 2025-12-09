@@ -23,14 +23,8 @@ public static class BookRuleFactory
         // Always exclude Saturday-published books
         yield return new ExcludeSaturdayPublishedRule();
 
-        // Create exclusion rules for each configured author name
-        var settings = BookProcessorConfiguration.Settings;
-        foreach (var authorName in settings.ExcludedAuthorNames)
-        {
-            if (!string.IsNullOrWhiteSpace(authorName))
-            {
-                yield return new ExcludeAuthorContainsRule(authorName);
-            }
-        }
+        // Create a rule with excluded author names from configuration
+        // The rule handles empty lists gracefully (logs warning, includes all books)
+        yield return new ExcludeAuthorContainsRule();
     }
 }

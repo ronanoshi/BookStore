@@ -20,6 +20,11 @@ public class BookProcessingServiceTests
         _readerMock = new Mock<IBookReader>();
         _processorMock = new Mock<IBookProcessor>();
         _writerMock = new Mock<IBookWriter>();
+
+        // Setup required properties for logging
+        _readerMock.Setup(r => r.SourceName).Returns("test-input.json");
+        _writerMock.Setup(w => w.DestinationName).Returns("test-output.csv");
+
         _sut = new BookProcessingService(_readerMock.Object, _processorMock.Object, _writerMock.Object);
     }
 

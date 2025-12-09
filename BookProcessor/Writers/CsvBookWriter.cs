@@ -13,6 +13,8 @@ public class CsvBookWriter : IBookWriter
         _filePath = filePath;
     }
 
+    public string DestinationName => _filePath;
+
     public async Task WriteBooksAsync(IEnumerable<Book> books, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(books);

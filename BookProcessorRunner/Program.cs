@@ -1,6 +1,7 @@
 ﻿using BookProcessor;
 using BookProcessor.Processors;
 using BookProcessor.Readers;
+using BookProcessor.Rules;
 using BookProcessor.Writers;
 
 Console.WriteLine("Book Processor - Starting...");
@@ -9,8 +10,12 @@ Console.WriteLine("Book Processor - Starting...");
 var inputFile = args.Length > 0 ? args[0] : "books.json";
 var outputFile = args.Length > 1 ? args[1] : "books_output.csv";
 
+// Get rules from factory (configured via appsettings.json)
+var filterRules = BookRuleFactory.CreateDefaultFilterRules();
+var transformRules = BookRuleFactory.CreateDefaultTransformRules();
+
 var reader = new JsonBookReader(inputFile);
-var processor = new DefaultBookProcessor();
+var processor = new RuleBasedBookProcessor(filterRules, transformRules);
 var writer = new CsvBookWriter(outputFile);
 
 // Create and execute the processing service

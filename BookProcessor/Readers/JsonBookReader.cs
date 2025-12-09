@@ -17,6 +17,8 @@ public class JsonBookReader : IBookReader
         _filePath = filePath;
     }
 
+    public string SourceName => _filePath;
+
     public async Task<IEnumerable<Book>> ReadBooksAsync(CancellationToken cancellationToken = default)
     {
         if (!File.Exists(_filePath))

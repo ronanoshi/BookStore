@@ -1,11 +1,13 @@
 using System.Text.Json;
 using BookProcessor.Models;
+using BookProcessor.Validation;
 
 namespace BookProcessor.Readers;
 
 public class JsonBookReader : IBookReader
 {
     private readonly string _filePath;
+    private readonly BookCollectionValidator _validator;
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
@@ -15,6 +17,7 @@ public class JsonBookReader : IBookReader
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         _filePath = filePath;
+        _validator = new BookCollectionValidator();
     }
 
     public string SourceName => _filePath;
@@ -28,7 +31,13 @@ public class JsonBookReader : IBookReader
 
         await using var stream = File.OpenRead(_filePath);
         var books = await JsonSerializer.DeserializeAsync<List<Book>>(stream, JsonOptions, cancellationToken);
-        
-        return books ?? [];
+
+        if (books is null || books.Count == 0)
+        {
+            return [];
+        }
+
+        // Validate and filter books - invalid books are logged and excluded
+        return _validator.ValidateAndFilter(books);
     }
 }

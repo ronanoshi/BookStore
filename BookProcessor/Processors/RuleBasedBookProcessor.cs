@@ -1,7 +1,3 @@
-using BookProcessor.Models;
-using BookProcessor.Rules;
-using NLog;
-
 namespace BookProcessor.Processors;
 
 /// <summary>

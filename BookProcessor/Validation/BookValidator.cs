@@ -1,4 +1,3 @@
-using BookProcessor.Models;
 using FluentValidation;
 
 namespace BookProcessor.Validation;

@@ -1,7 +1,5 @@
 using System.Text.Json;
 using BookProcessor.Readers;
-using FluentAssertions;
-using Xunit;
 
 namespace BookProcessor.UnitTests.Readers;
 

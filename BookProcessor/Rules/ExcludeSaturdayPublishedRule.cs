@@ -1,5 +1,3 @@
-using BookProcessor.Models;
-
 namespace BookProcessor.Rules;
 
 /// <summary>

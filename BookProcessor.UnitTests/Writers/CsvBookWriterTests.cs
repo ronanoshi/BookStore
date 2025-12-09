@@ -1,8 +1,4 @@
-using BookProcessor.Models;
-using BookProcessor.UnitTests.Helpers;
 using BookProcessor.Writers;
-using FluentAssertions;
-using Xunit;
 
 namespace BookProcessor.UnitTests.Writers;
 

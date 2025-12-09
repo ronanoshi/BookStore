@@ -1,6 +1,4 @@
 using BookProcessor.Configuration;
-using BookProcessor.Models;
-using NLog;
 
 namespace BookProcessor.Rules;
 

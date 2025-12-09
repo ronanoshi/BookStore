@@ -1,7 +1,3 @@
-using BookProcessor.Models;
-using FluentAssertions;
-using Xunit;
-
 namespace BookProcessor.UnitTests.Models;
 
 public class BookTests

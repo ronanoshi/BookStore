@@ -1,9 +1,3 @@
-using BookProcessor.Models;
-using BookProcessor.Rules;
-using BookProcessor.UnitTests.Helpers;
-using FluentAssertions;
-using Xunit;
-
 namespace BookProcessor.UnitTests.Rules;
 
 public class RoundPriceUpRuleTests

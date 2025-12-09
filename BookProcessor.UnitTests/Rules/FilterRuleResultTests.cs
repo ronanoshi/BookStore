@@ -1,7 +1,3 @@
-using BookProcessor.Rules;
-using FluentAssertions;
-using Xunit;
-
 namespace BookProcessor.UnitTests.Rules;
 
 public class FilterRuleResultTests

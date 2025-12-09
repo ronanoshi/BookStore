@@ -1,6 +1,4 @@
-using BookProcessor.Models;
 using FluentValidation.Results;
-using NLog;
 
 namespace BookProcessor.Validation;
 

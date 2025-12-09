@@ -1,10 +1,6 @@
-using BookProcessor.Models;
 using BookProcessor.Processors;
 using BookProcessor.Readers;
 using BookProcessor.Writers;
-using FluentAssertions;
-using Moq;
-using Xunit;
 
 namespace BookProcessor.UnitTests;
 

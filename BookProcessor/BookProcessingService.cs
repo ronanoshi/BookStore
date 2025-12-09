@@ -1,7 +1,6 @@
 using BookProcessor.Processors;
 using BookProcessor.Readers;
 using BookProcessor.Writers;
-using NLog;
 
 namespace BookProcessor;
 

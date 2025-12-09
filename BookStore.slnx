@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="BookProcessor/BookProcessor.csproj" />
   <Project Path="BookProcessorRunner/BookProcessorRunner.csproj" />
 </Solution>

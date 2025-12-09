@@ -7,7 +7,7 @@ using BookProcessor.Writers;
 Console.WriteLine("Book Processor - Starting...");
 
 // Configure the components
-var inputFile = args.Length > 0 ? args[0] : "booksInvalidJson.json";//"books.json";
+var inputFile = args.Length > 0 ? args[0] : "books.json";
 var outputFile = args.Length > 1 ? args[1] : "books_output.csv";
 
 // Get rules from factory (configured via appsettings.json)

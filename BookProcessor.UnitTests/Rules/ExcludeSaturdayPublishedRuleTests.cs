@@ -35,7 +35,7 @@ public class ExcludeSaturdayPublishedRuleTests
         var result = _sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Saturday");
         result.ExclusionReason.Should().Contain("bk101");
         result.ExclusionReason.Should().Contain("Saturday Book");
@@ -59,7 +59,7 @@ public class ExcludeSaturdayPublishedRuleTests
         var result = _sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
         result.ExclusionReason.Should().BeNull();
     }
 
@@ -83,7 +83,7 @@ public class ExcludeSaturdayPublishedRuleTests
             var result = _sut.Evaluate(book);
 
             // Assert
-            result.ShouldInclude.Should().BeFalse($"Date {saturday} is a Saturday and should be excluded");
+            result.IncldueInOutput.Should().BeFalse($"Date {saturday} is a Saturday and should be excluded");
         }
     }
 }

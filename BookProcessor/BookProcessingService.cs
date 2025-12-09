@@ -29,14 +29,11 @@ public class BookProcessingService
 
         try
         {
-            // Read books from source
             var books = await _reader.ReadBooksAsync(cancellationToken);
             Logger.Info("Read {BookCount} books from source", books.Count());
 
-            // Process books
             var processedBooks = await _processor.ProcessBooksAsync(books, cancellationToken);
 
-            // Write books to destination
             await _writer.WriteBooksAsync(processedBooks, cancellationToken);
             Logger.Info("Successfully wrote processed books to destination");
         }

@@ -1,8 +1,7 @@
 namespace BookProcessor.Processors;
 
 /// <summary>
-/// A book processor that applies a configurable set of rules to books.
-/// Transform rules modify book data, filter rules exclude books with logging.
+/// Applies filter rules (to exclude books) and transform rules (to modify book data).
 /// </summary>
 public class RuleBasedBookProcessor : IBookProcessor
 {
@@ -11,11 +10,6 @@ public class RuleBasedBookProcessor : IBookProcessor
     private readonly IReadOnlyList<IBookTransformRule> _transformRules;
     private readonly IReadOnlyList<IBookFilterRule> _filterRules;
 
-    /// <summary>
-    /// Creates a new instance of the processor with the specified rules.
-    /// </summary>
-    /// <param name="filterRules">Rules that filter/exclude books.</param>
-    /// <param name="transformRules">Rules that transform book data.</param>
     public RuleBasedBookProcessor(
         IEnumerable<IBookFilterRule> filterRules,
         IEnumerable<IBookTransformRule> transformRules)
@@ -35,15 +29,13 @@ public class RuleBasedBookProcessor : IBookProcessor
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            // First, check all filter rules
             var filterResult = EvaluateFilterRules(book);
-            if (!filterResult.ShouldInclude)
+            if (!filterResult.IncldueInOutput)
             {
                 Logger.Info("Book excluded: {ExclusionReason}", filterResult.ExclusionReason);
                 continue;
             }
 
-            // Apply all transform rules
             var transformedBook = ApplyTransformRules(book);
             processedBooks.Add(transformedBook);
         }
@@ -60,7 +52,7 @@ public class RuleBasedBookProcessor : IBookProcessor
         foreach (var rule in _filterRules)
         {
             var result = rule.Evaluate(book);
-            if (!result.ShouldInclude)
+            if (!result.IncldueInOutput)
             {
                 return result;
             }

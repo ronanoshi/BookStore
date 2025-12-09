@@ -7,13 +7,11 @@ public class DefaultBookProcessor : IBookProcessor
         ArgumentNullException.ThrowIfNull(books);
 
         var processedBooks = books.Select(ProcessBook);
-        
         return Task.FromResult(processedBooks);
     }
 
     private static Book ProcessBook(Book book)
     {
-        // Default processing: trim strings and normalize data
         return new Book
         {
             Id = book.Id?.Trim() ?? string.Empty,
@@ -33,7 +31,6 @@ public class DefaultBookProcessor : IBookProcessor
             return string.Empty;
         }
 
-        // Normalize whitespace in description (replace multiple spaces/newlines with single space)
         return string.Join(" ", description.Split([' ', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries));
     }
 }

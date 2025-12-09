@@ -93,7 +93,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
     }
 
     [Fact]
@@ -107,7 +107,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
     }
 
     #endregion
@@ -141,7 +141,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Peter Smith");
         result.ExclusionReason.Should().Contain("Peter");
         result.ExclusionReason.Should().Contain("bk101");
@@ -158,7 +158,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
         result.ExclusionReason.Should().BeNull();
     }
 
@@ -173,7 +173,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
     }
 
     [Fact]
@@ -187,7 +187,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue(); // "peter" not found in "PETER SMITH" with case-sensitive comparison
+        result.IncldueInOutput.Should().BeTrue(); // "peter" not found in "PETER SMITH" with case-sensitive comparison
     }
 
     [Fact]
@@ -201,7 +201,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
     }
 
     [Fact]
@@ -215,7 +215,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
     }
 
     [Fact]
@@ -238,7 +238,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
     }
 
     [Fact]
@@ -252,7 +252,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
     }
 
     [Fact]
@@ -266,7 +266,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Peter");
     }
 
@@ -281,7 +281,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Smith");
     }
 
@@ -296,7 +296,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("John");
     }
 
@@ -311,7 +311,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
     }
 
     [Fact]
@@ -325,7 +325,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Peter"); // First match
     }
 
@@ -343,7 +343,7 @@ public class ExcludeAuthorContainsRuleTests
         var result = sut.Evaluate(book);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("TargetAuthor");
     }
 

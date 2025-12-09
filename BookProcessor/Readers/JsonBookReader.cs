@@ -6,7 +6,7 @@ namespace BookProcessor.Readers;
 public class JsonBookReader : IBookReader
 {
     private readonly string _filePath;
-    private readonly BookCollectionValidator _validator;
+    private readonly BookCollectionValidator _validator = new();
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
@@ -16,7 +16,6 @@ public class JsonBookReader : IBookReader
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         _filePath = filePath;
-        _validator = new BookCollectionValidator();
     }
 
     public string SourceName => _filePath;
@@ -36,7 +35,6 @@ public class JsonBookReader : IBookReader
             return [];
         }
 
-        // Validate and filter books - invalid books are logged and excluded
         return _validator.ValidateAndFilter(books);
     }
 }

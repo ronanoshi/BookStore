@@ -19,11 +19,8 @@ public class CsvBookWriter : IBookWriter
         ArgumentNullException.ThrowIfNull(books);
 
         var sb = new StringBuilder();
-        
-        // Write header
         sb.AppendLine("Id,Author,Title,Genre,Price,PublishDate,Description");
 
-        // Write data rows
         foreach (var book in books)
         {
             sb.AppendLine($"{EscapeCsvField(book.Id)},{EscapeCsvField(book.Author)},{EscapeCsvField(book.Title)},{EscapeCsvField(book.Genre)},{book.Price},{book.PublishDate:yyyy-MM-dd},{EscapeCsvField(book.Description)}");
@@ -39,7 +36,6 @@ public class CsvBookWriter : IBookWriter
             return string.Empty;
         }
 
-        // If the field contains a comma, quote, or newline, wrap it in quotes
         if (field.Contains(',') || field.Contains('"') || field.Contains('\n') || field.Contains('\r'))
         {
             return $"\"{field.Replace("\"", "\"\"")}\"";

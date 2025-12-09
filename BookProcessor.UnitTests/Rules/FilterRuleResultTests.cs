@@ -9,7 +9,7 @@ public class FilterRuleResultTests
         var result = FilterRuleResult.Include();
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
         result.ExclusionReason.Should().BeNull();
     }
 
@@ -23,7 +23,7 @@ public class FilterRuleResultTests
         var result = FilterRuleResult.Exclude(reason);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Be(reason);
     }
 
@@ -34,7 +34,7 @@ public class FilterRuleResultTests
         var result = new FilterRuleResult(true);
 
         // Assert
-        result.ShouldInclude.Should().BeTrue();
+        result.IncldueInOutput.Should().BeTrue();
         result.ExclusionReason.Should().BeNull();
     }
 
@@ -48,7 +48,7 @@ public class FilterRuleResultTests
         var result = new FilterRuleResult(false, reason);
 
         // Assert
-        result.ShouldInclude.Should().BeFalse();
+        result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Be(reason);
     }
 }

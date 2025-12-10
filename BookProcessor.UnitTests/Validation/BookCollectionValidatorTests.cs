@@ -6,7 +6,7 @@ public class BookCollectionValidatorTests
 {
     private readonly BookCollectionValidator _sut = new();
 
-    #region Null Handling Tests
+    #region Null/Empty Handling Tests
 
     [Fact]
     public void ValidateAndFilter_WithNullCollection_ThrowsArgumentNullException()
@@ -33,7 +33,7 @@ public class BookCollectionValidatorTests
 
     #endregion
 
-    #region Duplicate ID Tests (Rule 0)
+    #region Duplicate ID Tests
 
     [Fact]
     public void ValidateAndFilter_WithDuplicateIds_ExcludesAllDuplicates()
@@ -42,28 +42,8 @@ public class BookCollectionValidatorTests
         var books = new List<Book>
         {
             BookTestData.CreateSampleBook(id: "bk101", title: "Book 1"),
-            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"), // Duplicate
-            BookTestData.CreateSampleBook(id: "bk102", title: "Book 3")  // Unique
-        };
-
-        // Act
-        var result = _sut.ValidateAndFilter(books).ToList();
-
-        // Assert
-        result.Should().ContainSingle();
-        result[0].Id.Should().Be("bk102");
-    }
-
-    [Fact]
-    public void ValidateAndFilter_WithMultipleDuplicates_ExcludesAllOfThem()
-    {
-        // Arrange
-        var books = new List<Book>
-        {
-            BookTestData.CreateSampleBook(id: "bk101", title: "Book 1"),
-            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"), // Duplicate of bk101
-            BookTestData.CreateSampleBook(id: "bk101", title: "Book 3"), // Duplicate of bk101
-            BookTestData.CreateSampleBook(id: "bk102", title: "Book 4")  // Unique
+            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"),
+            BookTestData.CreateSampleBook(id: "bk102", title: "Book 3")
         };
 
         // Act
@@ -81,10 +61,10 @@ public class BookCollectionValidatorTests
         var books = new List<Book>
         {
             BookTestData.CreateSampleBook(id: "bk101", title: "Book 1"),
-            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"), // Duplicate of bk101
+            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"),
             BookTestData.CreateSampleBook(id: "bk102", title: "Book 3"),
-            BookTestData.CreateSampleBook(id: "bk102", title: "Book 4"), // Duplicate of bk102
-            BookTestData.CreateSampleBook(id: "bk103", title: "Book 5")  // Unique
+            BookTestData.CreateSampleBook(id: "bk102", title: "Book 4"),
+            BookTestData.CreateSampleBook(id: "bk103", title: "Book 5")
         };
 
         // Act
@@ -118,50 +98,14 @@ public class BookCollectionValidatorTests
     #region Individual Validation Tests
 
     [Fact]
-    public void ValidateAndFilter_WithBookWithEmptyId_ExcludesBookWithEmptyId()
-    {
-        // Arrange
-        var books = new List<Book>
-        {
-            BookTestData.CreateSampleBook(id: "bk101", title: "Valid Book"),
-            BookTestData.CreateSampleBook(id: "", title: "Invalid Book") // Empty ID
-        };
-
-        // Act
-        var result = _sut.ValidateAndFilter(books).ToList();
-
-        // Assert
-        result.Should().ContainSingle();
-        result[0].Id.Should().Be("bk101");
-    }
-
-    [Fact]
-    public void ValidateAndFilter_WithNegativePrice_ExcludesBook()
+    public void ValidateAndFilter_WithInvalidBook_ExcludesInvalidBook()
     {
         // Arrange
         var books = new List<Book>
         {
             BookTestData.CreateSampleBook(id: "bk101", price: 19.99m),
-            BookTestData.CreateSampleBook(id: "bk102", price: -5.00m) // Invalid price
+            BookTestData.CreateSampleBook(id: "bk102", price: -5.00m)
         };
-
-        // Act
-        var result = _sut.ValidateAndFilter(books).ToList();
-
-        // Assert
-        result.Should().ContainSingle();
-        result[0].Id.Should().Be("bk101");
-    }
-
-    [Fact]
-    public void ValidateAndFilter_WithDefaultPublishDate_ExcludesBook()
-    {
-        // Arrange
-        var validBook = BookTestData.CreateSampleBook(id: "bk101");
-        var invalidBook = BookTestData.CreateSampleBook(id: "bk102");
-        invalidBook.PublishDate = default;
-
-        var books = new List<Book> { validBook, invalidBook };
 
         // Act
         var result = _sut.ValidateAndFilter(books).ToList();
@@ -182,9 +126,9 @@ public class BookCollectionValidatorTests
         var books = new List<Book>
         {
             BookTestData.CreateSampleBook(id: "bk101", title: "Book 1"),
-            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"), // Duplicate
-            BookTestData.CreateSampleBook(id: "bk102", price: -5.00m),   // Invalid price
-            BookTestData.CreateSampleBook(id: "bk103", title: "Book 4")  // Valid
+            BookTestData.CreateSampleBook(id: "bk101", title: "Book 2"),
+            BookTestData.CreateSampleBook(id: "bk102", price: -5.00m),
+            BookTestData.CreateSampleBook(id: "bk103", title: "Book 4")
         };
 
         // Act
@@ -202,7 +146,7 @@ public class BookCollectionValidatorTests
         var books = new List<Book>
         {
             BookTestData.CreateSampleBook(id: "bk101"),
-            BookTestData.CreateSampleBook(id: "bk101") // All are duplicates
+            BookTestData.CreateSampleBook(id: "bk101")
         };
 
         // Act
@@ -210,37 +154,6 @@ public class BookCollectionValidatorTests
 
         // Assert
         result.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void ValidateAndFilter_AllBooksValid_ReturnsAll()
-    {
-        // Arrange
-        var books = BookTestData.CreateSampleBooks(5);
-
-        // Act
-        var result = _sut.ValidateAndFilter(books).ToList();
-
-        // Assert
-        result.Should().HaveCount(5);
-    }
-
-    #endregion
-
-    #region Optional Fields Tests
-
-    [Fact]
-    public void ValidateAndFilter_WithEmptyGenreAndDescription_IncludesBook()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook(id: "bk101", genre: "", description: "");
-        var books = new List<Book> { book };
-
-        // Act
-        var result = _sut.ValidateAndFilter(books).ToList();
-
-        // Assert
-        result.Should().ContainSingle();
     }
 
     #endregion

@@ -11,8 +11,8 @@ var inputFile = args.Length > 0 ? args[0] : "books.json";
 var outputFile = args.Length > 1 ? args[1] : "books_output.csv";
 
 // Get rules from factory (configured via appsettings.json)
-var filterRules = BookRuleFactory.CreateDefaultFilterRules();
-var transformRules = BookRuleFactory.CreateDefaultTransformRules();
+var filterRules = BookRuleFactory.CreateFilterRules();
+var transformRules = BookRuleFactory.CreateTransformRules();
 
 var reader = new JsonBookReader(inputFile);
 var processor = new RuleBasedBookProcessor(filterRules, transformRules);

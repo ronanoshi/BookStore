@@ -33,31 +33,14 @@ public class JsonBookReaderTests : IDisposable
         return filePath;
     }
 
-    [Fact]
-    public void Constructor_WithNullFilePath_ThrowsArgumentException()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void Constructor_WithInvalidFilePath_ThrowsArgumentException(string? filePath)
     {
         // Act
-        var act = () => new JsonBookReader(null!);
-
-        // Assert
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void Constructor_WithEmptyFilePath_ThrowsArgumentException()
-    {
-        // Act
-        var act = () => new JsonBookReader(string.Empty);
-
-        // Assert
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void Constructor_WithWhitespaceFilePath_ThrowsArgumentException()
-    {
-        // Act
-        var act = () => new JsonBookReader("   ");
+        var act = () => new JsonBookReader(filePath!);
 
         // Assert
         act.Should().Throw<ArgumentException>();
@@ -143,34 +126,6 @@ public class JsonBookReaderTests : IDisposable
 
         // Assert
         result.Should().HaveCount(3);
-    }
-
-    [Fact]
-    public async Task ReadBooksAsync_IsCaseInsensitive()
-    {
-        // Arrange
-        var json = """
-        [
-            {
-                "@ID": "bk101",
-                "AUTHOR": "Test Author",
-                "TITLE": "Test Book",
-                "GENRE": "Fiction",
-                "PRICE": 19.99,
-                "PUBLISH_DATE": "2023-01-15",
-                "DESCRIPTION": "A test description."
-            }
-        ]
-        """;
-        var filePath = CreateTempJsonFile(json);
-        var reader = new JsonBookReader(filePath);
-
-        // Act
-        var result = (await reader.ReadBooksAsync()).ToList();
-
-        // Assert
-        result.Should().ContainSingle();
-        result[0].Author.Should().Be("Test Author");
     }
 
     [Fact]

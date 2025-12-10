@@ -26,6 +26,8 @@ public class RoundPriceUpRuleTests
     [InlineData(19.99, 20)]
     [InlineData(19.50, 20)]
     [InlineData(19.001, 20)]
+    [InlineData(20.00, 20)]
+    [InlineData(0, 0)]
     public void Transform_RoundsPriceUpToNearestWholeNumber(decimal inputPrice, decimal expectedPrice)
     {
         // Arrange
@@ -36,32 +38,6 @@ public class RoundPriceUpRuleTests
 
         // Assert
         result.Price.Should().Be(expectedPrice);
-    }
-
-    [Fact]
-    public void Transform_WithWholeNumber_KeepsSamePrice()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook(price: 20.00m);
-
-        // Act
-        var result = _sut.Transform(book);
-
-        // Assert
-        result.Price.Should().Be(20m);
-    }
-
-    [Fact]
-    public void Transform_WithZeroPrice_ReturnsZero()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook(price: 0m);
-
-        // Act
-        var result = _sut.Transform(book);
-
-        // Assert
-        result.Price.Should().Be(0m);
     }
 
     [Fact]

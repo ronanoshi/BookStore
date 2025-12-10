@@ -26,29 +26,4 @@ public class FilterRuleResultTests
         result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Be(reason);
     }
-
-    [Fact]
-    public void Constructor_WithShouldIncludeTrue_SetsProperties()
-    {
-        // Act
-        var result = new FilterRuleResult(true);
-
-        // Assert
-        result.IncldueInOutput.Should().BeTrue();
-        result.ExclusionReason.Should().BeNull();
-    }
-
-    [Fact]
-    public void Constructor_WithShouldIncludeFalseAndReason_SetsProperties()
-    {
-        // Arrange
-        var reason = "Custom reason";
-
-        // Act
-        var result = new FilterRuleResult(false, reason);
-
-        // Assert
-        result.IncldueInOutput.Should().BeFalse();
-        result.ExclusionReason.Should().Be(reason);
-    }
 }

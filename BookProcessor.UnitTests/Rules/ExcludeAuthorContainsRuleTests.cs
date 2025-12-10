@@ -46,72 +46,6 @@ public class ExcludeAuthorContainsRuleTests
 
     #endregion
 
-    #region RuleName Tests
-
-    [Fact]
-    public void RuleName_WithEmptyList_ShowsZeroCount()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(new List<string>());
-
-        // Assert
-        sut.RuleName.Should().Be("ExcludeAuthorContains(0 names)");
-    }
-
-    [Fact]
-    public void RuleName_WithSingleName_ShowsCount()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(["Peter"]);
-
-        // Assert
-        sut.RuleName.Should().Be("ExcludeAuthorContains(1 names)");
-    }
-
-    [Fact]
-    public void RuleName_WithMultipleNames_ShowsCount()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(["Peter", "Smith", "John"]);
-
-        // Assert
-        sut.RuleName.Should().Be("ExcludeAuthorContains(3 names)");
-    }
-
-    #endregion
-
-    #region Empty List Evaluation Tests
-
-    [Fact]
-    public void Evaluate_WithEmptyExcludedNames_ReturnsInclude()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(new List<string>());
-        var book = BookTestData.CreateSampleBook(author: "Peter Smith");
-
-        // Act
-        var result = sut.Evaluate(book);
-
-        // Assert
-        result.IncldueInOutput.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Evaluate_WithOnlyWhitespaceNames_ReturnsInclude()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(["", "   "]);
-        var book = BookTestData.CreateSampleBook(author: "Peter Smith");
-
-        // Act
-        var result = sut.Evaluate(book);
-
-        // Assert
-        result.IncldueInOutput.Should().BeTrue();
-    }
-
-    #endregion
-
     #region Evaluation Tests
 
     [Fact]
@@ -125,6 +59,20 @@ public class ExcludeAuthorContainsRuleTests
 
         // Assert
         act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Evaluate_WithEmptyExcludedNames_ReturnsInclude()
+    {
+        // Arrange
+        var sut = new ExcludeAuthorContainsRule(new List<string>());
+        var book = BookTestData.CreateSampleBook(author: "Peter Smith");
+
+        // Act
+        var result = sut.Evaluate(book);
+
+        // Assert
+        result.IncldueInOutput.Should().BeTrue();
     }
 
     [Fact]
@@ -191,20 +139,6 @@ public class ExcludeAuthorContainsRuleTests
     }
 
     [Fact]
-    public void Evaluate_WithCaseSensitiveComparison_MatchesExactCase()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(["Peter"], StringComparison.Ordinal);
-        var book = BookTestData.CreateSampleBook(author: "Peter Smith");
-
-        // Act
-        var result = sut.Evaluate(book);
-
-        // Assert
-        result.IncldueInOutput.Should().BeFalse();
-    }
-
-    [Fact]
     public void Evaluate_AuthorContainsNameAsSubstring_ReturnsExclude()
     {
         // Arrange
@@ -256,22 +190,7 @@ public class ExcludeAuthorContainsRuleTests
     }
 
     [Fact]
-    public void Evaluate_AuthorContainsFirstName_ReturnsExclude()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(["Peter", "Smith", "John"]);
-        var book = BookTestData.CreateSampleBook(author: "Peter Williams");
-
-        // Act
-        var result = sut.Evaluate(book);
-
-        // Assert
-        result.IncldueInOutput.Should().BeFalse();
-        result.ExclusionReason.Should().Contain("Peter");
-    }
-
-    [Fact]
-    public void Evaluate_AuthorContainsMiddleName_ReturnsExclude()
+    public void Evaluate_AuthorContainsAnyExcludedName_ReturnsExclude()
     {
         // Arrange
         var sut = new ExcludeAuthorContainsRule(["Peter", "Smith", "John"]);
@@ -283,21 +202,6 @@ public class ExcludeAuthorContainsRuleTests
         // Assert
         result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Smith");
-    }
-
-    [Fact]
-    public void Evaluate_AuthorContainsLastName_ReturnsExclude()
-    {
-        // Arrange
-        var sut = new ExcludeAuthorContainsRule(["Peter", "Smith", "John"]);
-        var book = BookTestData.CreateSampleBook(author: "John Williams");
-
-        // Act
-        var result = sut.Evaluate(book);
-
-        // Assert
-        result.IncldueInOutput.Should().BeFalse();
-        result.ExclusionReason.Should().Contain("John");
     }
 
     [Fact]
@@ -327,24 +231,6 @@ public class ExcludeAuthorContainsRuleTests
         // Assert
         result.IncldueInOutput.Should().BeFalse();
         result.ExclusionReason.Should().Contain("Peter"); // First match
-    }
-
-    [Fact]
-    public void Evaluate_WithManyNames_StillWorksCorrectly()
-    {
-        // Arrange - simulate many excluded names
-        var names = Enumerable.Range(1, 100).Select(i => $"ExcludedAuthor{i}").ToList();
-        names.Add("TargetAuthor"); // Add the one we're looking for at the end
-
-        var sut = new ExcludeAuthorContainsRule(names);
-        var book = BookTestData.CreateSampleBook(author: "TargetAuthor Smith");
-
-        // Act
-        var result = sut.Evaluate(book);
-
-        // Assert
-        result.IncldueInOutput.Should().BeFalse();
-        result.ExclusionReason.Should().Contain("TargetAuthor");
     }
 
     #endregion

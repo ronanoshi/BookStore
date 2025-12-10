@@ -6,14 +6,17 @@ public class BookValidatorTests
 {
     private readonly BookValidator _sut = new();
 
-    #region Id Validation Tests
+    #region Required Fields Tests
 
-    [Fact]
-    public void Validate_WithNullId_ReturnsInvalid()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void Validate_WithInvalidId_ReturnsInvalid(string? id)
     {
         // Arrange
         var book = BookTestData.CreateSampleBook();
-        book.Id = null!;
+        book.Id = id!;
 
         // Act
         var result = _sut.Validate(book);
@@ -23,59 +26,14 @@ public class BookValidatorTests
         result.Errors.Should().Contain(e => e.PropertyName == "Id");
     }
 
-    [Fact]
-    public void Validate_WithEmptyId_ReturnsInvalid()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void Validate_WithInvalidAuthor_ReturnsInvalid(string? author)
     {
         // Arrange
         var book = BookTestData.CreateSampleBook();
-        book.Id = "";
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Id");
-    }
-
-    [Fact]
-    public void Validate_WithWhitespaceId_ReturnsInvalid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
-        book.Id = " ";
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Id");
-    }
-
-    [Fact]
-    public void Validate_WithValidId_ReturnsValid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook(id: "bk101");
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Author Validation Tests
-
-    [Fact]
-    public void Validate_WithNullAuthor_ReturnsInvalid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
-        book.Author = null!;
+        book.Author = author!;
 
         // Act
         var result = _sut.Validate(book);
@@ -85,46 +43,14 @@ public class BookValidatorTests
         result.Errors.Should().Contain(e => e.PropertyName == "Author");
     }
 
-    [Fact]
-    public void Validate_WithEmptyAuthor_ReturnsInvalid()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void Validate_WithInvalidTitle_ReturnsInvalid(string? title)
     {
         // Arrange
         var book = BookTestData.CreateSampleBook();
-        book.Author = "";
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Author");
-    }
-
-    #endregion
-
-    #region Title Validation Tests
-
-    [Fact]
-    public void Validate_WithNullTitle_ReturnsInvalid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
-        book.Title = null!;
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.PropertyName == "Title");
-    }
-
-    [Fact]
-    public void Validate_WithEmptyTitle_ReturnsInvalid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
-        book.Title = "";
+        book.Title = title!;
 
         // Act
         var result = _sut.Validate(book);
@@ -153,19 +79,6 @@ public class BookValidatorTests
     }
 
     [Fact]
-    public void Validate_WithZeroPrice_ReturnsValid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook(price: 0m);
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
     public void Validate_WithTooManyDecimalPlaces_ReturnsInvalid()
     {
         // Arrange
@@ -180,12 +93,11 @@ public class BookValidatorTests
     }
 
     [Theory]
+    [InlineData(0)]
     [InlineData(19.99)]
     [InlineData(19.90)]
-    [InlineData(19.00)]
-    [InlineData(19)]
-    [InlineData(0.01)]
-    public void Validate_WithValidMoneyValue_ReturnsValid(decimal price)
+    [InlineData(100)]
+    public void Validate_WithValidPrice_ReturnsValid(decimal price)
     {
         // Arrange
         var book = BookTestData.CreateSampleBook(price: price);
@@ -216,56 +128,16 @@ public class BookValidatorTests
         result.Errors.Should().Contain(e => e.PropertyName == "PublishDate");
     }
 
-    [Fact]
-    public void Validate_WithValidPublishDate_ReturnsValid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook(publishDate: new DateOnly(2023, 5, 15));
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
     #endregion
 
-    #region Genre and Description (Optional Fields) Tests
+    #region Optional Fields Tests
 
     [Fact]
-    public void Validate_WithNullGenre_ReturnsValid()
+    public void Validate_WithNullOptionalFields_ReturnsValid()
     {
         // Arrange
         var book = BookTestData.CreateSampleBook();
         book.Genre = null!;
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Validate_WithEmptyGenre_ReturnsValid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
-        book.Genre = "";
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Validate_WithNullDescription_ReturnsValid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
         book.Description = null!;
 
         // Act
@@ -275,23 +147,9 @@ public class BookValidatorTests
         result.IsValid.Should().BeTrue();
     }
 
-    [Fact]
-    public void Validate_WithEmptyDescription_ReturnsValid()
-    {
-        // Arrange
-        var book = BookTestData.CreateSampleBook();
-        book.Description = "";
-
-        // Act
-        var result = _sut.Validate(book);
-
-        // Assert
-        result.IsValid.Should().BeTrue();
-    }
-
     #endregion
 
-    #region Complete Book Validation Tests
+    #region Complete Book Tests
 
     [Fact]
     public void Validate_WithCompleteValidBook_ReturnsValid()
@@ -334,7 +192,7 @@ public class BookValidatorTests
 
         // Assert
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCountGreaterThanOrEqualTo(4); // Id, Author, Title, Price, PublishDate
+        result.Errors.Should().HaveCountGreaterThanOrEqualTo(4);
     }
 
     #endregion

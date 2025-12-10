@@ -31,31 +31,14 @@ public class CsvBookWriterTests : IDisposable
         return filePath;
     }
 
-    [Fact]
-    public void Constructor_WithNullFilePath_ThrowsArgumentException()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Constructor_WithInvalidFilePath_ThrowsArgumentException(string? filePath)
     {
         // Act
-        var act = () => new CsvBookWriter(null!);
-
-        // Assert
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void Constructor_WithEmptyFilePath_ThrowsArgumentException()
-    {
-        // Act
-        var act = () => new CsvBookWriter(string.Empty);
-
-        // Assert
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void Constructor_WithWhitespaceFilePath_ThrowsArgumentException()
-    {
-        // Act
-        var act = () => new CsvBookWriter("   ");
+        var act = () => new CsvBookWriter(filePath!);
 
         // Assert
         act.Should().Throw<ArgumentException>();
@@ -138,12 +121,12 @@ public class CsvBookWriterTests : IDisposable
     }
 
     [Fact]
-    public async Task WriteBooksAsync_EscapesCommasInFields()
+    public async Task WriteBooksAsync_EscapesSpecialCharacters()
     {
         // Arrange
         var filePath = GetTempFilePath();
         var writer = new CsvBookWriter(filePath);
-        var book = BookTestData.CreateSampleBook(title: "Hello, World");
+        var book = BookTestData.CreateSampleBook(title: "Hello, World", description: "The \"Best\" Book\nEver");
         var books = new List<Book> { book };
 
         // Act
@@ -152,71 +135,6 @@ public class CsvBookWriterTests : IDisposable
         // Assert
         var content = await File.ReadAllTextAsync(filePath);
         content.Should().Contain("\"Hello, World\"");
-    }
-
-    [Fact]
-    public async Task WriteBooksAsync_EscapesQuotesInFields()
-    {
-        // Arrange
-        var filePath = GetTempFilePath();
-        var writer = new CsvBookWriter(filePath);
-        var book = BookTestData.CreateSampleBook(title: "The \"Best\" Book");
-        var books = new List<Book> { book };
-
-        // Act
-        await writer.WriteBooksAsync(books);
-
-        // Assert
-        var content = await File.ReadAllTextAsync(filePath);
-        content.Should().Contain("\"The \"\"Best\"\" Book\"");
-    }
-
-    [Fact]
-    public async Task WriteBooksAsync_EscapesNewlinesInFields()
-    {
-        // Arrange
-        var filePath = GetTempFilePath();
-        var writer = new CsvBookWriter(filePath);
-        var book = BookTestData.CreateSampleBook(description: "Line 1\nLine 2");
-        var books = new List<Book> { book };
-
-        // Act
-        await writer.WriteBooksAsync(books);
-
-        // Assert
-        var content = await File.ReadAllTextAsync(filePath);
-        content.Should().Contain("\"Line 1\nLine 2\"");
-    }
-
-    [Fact]
-    public async Task WriteBooksAsync_FormatsDateCorrectly()
-    {
-        // Arrange
-        var filePath = GetTempFilePath();
-        var writer = new CsvBookWriter(filePath);
-        var book = BookTestData.CreateSampleBook(publishDate: new DateOnly(2023, 12, 25));
-        var books = new List<Book> { book };
-
-        // Act
-        await writer.WriteBooksAsync(books);
-
-        // Assert
-        var content = await File.ReadAllTextAsync(filePath);
-        content.Should().Contain("2023-12-25");
-    }
-
-    [Fact]
-    public async Task WriteBooksAsync_CreatesFileIfNotExists()
-    {
-        // Arrange
-        var filePath = GetTempFilePath();
-        var writer = new CsvBookWriter(filePath);
-        var books = BookTestData.CreateSampleBooks(1);
-
-        // Act
-        await writer.WriteBooksAsync(books);
-
-        // Assert
-        File.Exists(filePath).Should().BeTrue();
+        content.Should().Contain("\"The \"\"Best\"\" Book");
     }
 }

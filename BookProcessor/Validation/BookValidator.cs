@@ -7,16 +7,16 @@ public class BookValidator : AbstractValidator<Book>
     public BookValidator()
     {
         RuleFor(book => book.Id)
-            .NotNull().WithMessage("Book ID (@id) cannot be null")
-            .NotEmpty().WithMessage("Book ID (@id) cannot be empty");
+            .NotNull().WithMessage("Book ID (@id) must not be null")
+            .NotEmpty().WithMessage("Book ID (@id) must not be empty");
 
         RuleFor(book => book.Author)
-            .NotNull().WithMessage("Author cannot be null")
-            .NotEmpty().WithMessage("Author cannot be empty");
+            .NotNull().WithMessage("Author must not be null")
+            .NotEmpty().WithMessage("Author must not be empty");
 
         RuleFor(book => book.Title)
-            .NotNull().WithMessage("Title cannot be null")
-            .NotEmpty().WithMessage("Title cannot be empty");
+            .NotNull().WithMessage("Title must not be null")
+            .NotEmpty().WithMessage("Title must not be empty");
 
         RuleFor(book => book.Price)
             .GreaterThanOrEqualTo(0).WithMessage("Price must be non-negative")

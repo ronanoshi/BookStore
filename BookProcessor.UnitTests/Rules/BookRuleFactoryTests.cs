@@ -3,10 +3,10 @@ namespace BookProcessor.UnitTests.Rules;
 public class BookRuleFactoryTests
 {
     [Fact]
-    public void CreateDefaultTransformRules_ReturnsRoundPriceUpRule()
+    public void CreateTransformRules_ReturnsRoundPriceUpRule()
     {
         // Act
-        var rules = BookRuleFactory.CreateDefaultTransformRules().ToList();
+        var rules = BookRuleFactory.CreateTransformRules().ToList();
 
         // Assert
         rules.Should().ContainSingle();
@@ -14,45 +14,28 @@ public class BookRuleFactoryTests
     }
 
     [Fact]
-    public void CreateDefaultFilterRules_ReturnsExcludeSaturdayPublishedRuleAsFirst()
+    public void CreateFilterRules_ReturnsExpectedRules()
     {
         // Act
-        var rules = BookRuleFactory.CreateDefaultFilterRules().ToList();
+        var rules = BookRuleFactory.CreateFilterRules().ToList();
 
         // Assert
-        rules.Should().HaveCountGreaterThanOrEqualTo(1);
+        rules.Should().HaveCountGreaterThanOrEqualTo(2);
         rules.First().Should().BeOfType<ExcludeSaturdayPublishedRule>();
-    }
-
-    [Fact]
-    public void CreateDefaultFilterRules_ReturnsExcludeAuthorContainsRule()
-    {
-        // Act
-        var rules = BookRuleFactory.CreateDefaultFilterRules().ToList();
-
-        // Assert
         rules.OfType<ExcludeAuthorContainsRule>().Should().ContainSingle();
     }
 
     [Fact]
-    public void CreateDefaultTransformRules_ReturnsNewInstancesEachCall()
+    public void CreateRules_ReturnsNewInstancesEachCall()
     {
         // Act
-        var rules1 = BookRuleFactory.CreateDefaultTransformRules().ToList();
-        var rules2 = BookRuleFactory.CreateDefaultTransformRules().ToList();
+        var transformRules1 = BookRuleFactory.CreateTransformRules().ToList();
+        var transformRules2 = BookRuleFactory.CreateTransformRules().ToList();
+        var filterRules1 = BookRuleFactory.CreateFilterRules().ToList();
+        var filterRules2 = BookRuleFactory.CreateFilterRules().ToList();
 
         // Assert
-        rules1[0].Should().NotBeSameAs(rules2[0]);
-    }
-
-    [Fact]
-    public void CreateDefaultFilterRules_ReturnsNewInstancesEachCall()
-    {
-        // Act
-        var rules1 = BookRuleFactory.CreateDefaultFilterRules().ToList();
-        var rules2 = BookRuleFactory.CreateDefaultFilterRules().ToList();
-
-        // Assert
-        rules1[0].Should().NotBeSameAs(rules2[0]);
+        transformRules1[0].Should().NotBeSameAs(transformRules2[0]);
+        filterRules1[0].Should().NotBeSameAs(filterRules2[0]);
     }
 }

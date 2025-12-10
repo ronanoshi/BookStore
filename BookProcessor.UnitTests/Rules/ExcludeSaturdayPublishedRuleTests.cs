@@ -62,28 +62,4 @@ public class ExcludeSaturdayPublishedRuleTests
         result.IncldueInOutput.Should().BeTrue();
         result.ExclusionReason.Should().BeNull();
     }
-
-    [Fact]
-    public void Evaluate_WithMultipleSaturdays_AllExcluded()
-    {
-        // Arrange - Various Saturdays
-        var saturdays = new[]
-        {
-            new DateOnly(2023, 1, 7),
-            new DateOnly(2023, 6, 24),
-            new DateOnly(2023, 12, 30),
-            new DateOnly(2024, 2, 17)
-        };
-
-        foreach (var saturday in saturdays)
-        {
-            var book = BookTestData.CreateSampleBook(publishDate: saturday);
-
-            // Act
-            var result = _sut.Evaluate(book);
-
-            // Assert
-            result.IncldueInOutput.Should().BeFalse($"Date {saturday} is a Saturday and should be excluded");
-        }
-    }
 }

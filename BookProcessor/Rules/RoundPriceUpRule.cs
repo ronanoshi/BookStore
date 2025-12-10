@@ -1,8 +1,5 @@
 namespace BookProcessor.Rules;
 
-/// <summary>
-/// Rounds the book price upwards to the nearest whole number.
-/// </summary>
 public class RoundPriceUpRule : IBookTransformRule
 {
     public string RuleName => "RoundPriceUp";

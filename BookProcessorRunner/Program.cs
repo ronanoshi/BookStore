@@ -6,11 +6,9 @@ using BookProcessor.Writers;
 
 Console.WriteLine("Book Processor - Starting...");
 
-// Configure the components
 var inputFile = args.Length > 0 ? args[0] : "books.json";
 var outputFile = args.Length > 1 ? args[1] : "books_output.csv";
 
-// Get rules from factory (configured via appsettings.json)
 var filterRules = BookRuleFactory.CreateFilterRules();
 var transformRules = BookRuleFactory.CreateTransformRules();
 
@@ -18,7 +16,6 @@ var reader = new JsonBookReader(inputFile);
 var processor = new RuleBasedBookProcessor(filterRules, transformRules);
 var writer = new CsvBookWriter(outputFile);
 
-// Create and execute the processing service
 var service = new BookProcessingService(reader, processor, writer);
 
 try

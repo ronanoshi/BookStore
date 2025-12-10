@@ -2,9 +2,6 @@ using FluentValidation.Results;
 
 namespace BookProcessor.Validation;
 
-/// <summary>
-/// Validates books and returns only valid ones. Excludes duplicates and invalid entries with logging.
-/// </summary>
 public class BookCollectionValidator
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

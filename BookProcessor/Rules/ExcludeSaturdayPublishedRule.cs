@@ -1,8 +1,5 @@
 namespace BookProcessor.Rules;
 
-/// <summary>
-/// Excludes books that were published on a Saturday.
-/// </summary>
 public class ExcludeSaturdayPublishedRule : IBookFilterRule
 {
     public string RuleName => "ExcludeSaturdayPublished";

@@ -2,9 +2,6 @@ using BookProcessor.Configuration;
 
 namespace BookProcessor.Rules;
 
-/// <summary>
-/// Excludes books where the author name contains any of the configured excluded names.
-/// </summary>
 public class ExcludeAuthorContainsRule : IBookFilterRule
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
